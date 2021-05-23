@@ -1,11 +1,13 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import "../App.css";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import classNameModule from "classnames";
 import { AddGroceryItem } from "./AddGroceryItem";
 const API_BASE_URL = "http://localhost:8080";
 export function GrocerySection() {
+  const histroy = useHistory();
   const [groceryItems, updateGroceryItems] = useState([]);
   async function fetchGroceryItems() {
     const groceryData = await axios.get(`${API_BASE_URL}/grocery/getAll`);
@@ -58,6 +60,10 @@ export function GrocerySection() {
     }
   }
 
+  function handleLogout() {
+    localStorage.removeItem("userToken");
+    histroy.push("/login");
+  }
   function renderDeleteButton(item) {
     return (
       <div>
@@ -123,6 +129,13 @@ export function GrocerySection() {
             {renderGroceryItems()}
           </div>
         </div>
+
+        <button
+          className={"btn btn-danger mt-4"}
+          onClick={() => handleLogout()}
+        >
+          Logout
+        </button> 
       </div>
     </div>
   );
